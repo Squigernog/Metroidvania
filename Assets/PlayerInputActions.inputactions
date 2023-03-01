@@ -44,7 +44,7 @@
                 {
                     "name": "Dash",
                     "type": "Button",
-                    "id": "4ba9f730-78f0-4830-83a7-55b7012fa477",
+                    "id": "33a14868-d6f2-4bcc-9ae1-952dc37bc69d",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -296,7 +296,7 @@
                 },
                 {
                     "name": "",
-                    "id": "4764779d-7e55-4022-b60f-c94474712229",
+                    "id": "ac3a1738-a17e-4ca3-a38a-08c6a1caa2c6",
                     "path": "<Keyboard>/leftShift",
                     "interactions": "",
                     "processors": "",
@@ -307,8 +307,8 @@
                 },
                 {
                     "name": "",
-                    "id": "6fd1119f-be64-408a-b050-4107598310f8",
-                    "path": "<Gamepad>/leftShoulder",
+                    "id": "9a681a54-a189-4b46-b059-a0a399e84cb7",
+                    "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",

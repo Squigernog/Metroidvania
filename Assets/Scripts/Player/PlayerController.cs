@@ -40,6 +40,9 @@ public class PlayerController : MonoBehaviour
         _playerInputActions.Player.Jump.performed += DoJump;
         _playerInputActions.Player.Jump.canceled += DoJump;
         _playerInputActions.Player.Jump.Enable();
+
+        _playerInputActions.Player.Dash.performed += DoDash;
+        _playerInputActions.Player.Dash.Enable();
     }
 
     private void OnDisable()
@@ -79,6 +82,11 @@ public class PlayerController : MonoBehaviour
         // Reset player double jump
         if (IsGrounded())
             _doubleJumped = false;
+    }
+
+    public void DoDash(InputAction.CallbackContext context)
+    {
+        Debug.Log("Dashed");
     }
 
     /// <summary>

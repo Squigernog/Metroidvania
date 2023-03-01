@@ -9,11 +9,16 @@ public class PlayerController : MonoBehaviour
     [Header("Physics")]
     public Rigidbody2D rb;
     public float moveSpeed;
-    public float jumpSpeed;
     private Vector2 _moveDirection;
+    private bool _facingRight;
 
+    [Header("Jump")]
+    public float jumpSpeed;
     public Transform groundCheck;
     public LayerMask groundLayer;
+
+    [Header("Misc.")]
+    public Transform firePoint;
 
     [Header("Input")]
     private PlayerInputActions _playerInputActions;
@@ -29,25 +34,38 @@ public class PlayerController : MonoBehaviour
         _movement = _playerInputActions.Player.Move;
         _movement.Enable();
 
+        // Subscribe methods to button inputs
         _playerInputActions.Player.Jump.performed += DoJump;
         _playerInputActions.Player.Jump.canceled += DoJump;
         _playerInputActions.Player.Jump.Enable();
-
-        _playerInputActions.Player.Fire.performed += Fire;
-        _playerInputActions.Player.Fire.Enable();
     }
 
+    private void OnDisable()
+    {
+        _movement.Disable();
+        _playerInputActions.Player.Jump.Disable();
+    }
+
+    /// <summary>
+    /// Check if player is touching ground on bottom of model
+    /// </summary>
+    /// <returns>bool</returns>
     private bool IsGrounded()
     {
         return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
     }
 
+    /// <summary>
+    /// Performs jump action for player
+    /// </summary>
+    /// <param name="context"></param>
     public void DoJump(InputAction.CallbackContext context)
     {
-        //Debug.Log("Jump");
+        // Check if button pressed
         if(context.performed && IsGrounded())
             rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
 
+        // Check if button released & traveling up
         if(context.canceled && rb.velocity.y > 0f)
         {
             Debug.Log("Jump Canceled");
@@ -56,20 +74,19 @@ public class PlayerController : MonoBehaviour
             
     }
 
-    private void Fire(InputAction.CallbackContext context)
+    /// <summary>
+    /// Flip player model when changing directions
+    /// </summary>
+    public void Flip()
     {
-        Debug.Log("Fire");
+        _facingRight = !_facingRight;
+
+        transform.Rotate(0f, 180f, 0f);
     }
 
-    private void OnDisable()
-    {
-        _movement.Disable();
-        _playerInputActions.Player.Jump.Disable();
-        _playerInputActions.Player.Fire.Disable();
-    }
     private void Update()
     {
-        //Debug.Log("Movement Values " + _movement.ReadValue<Vector2>());
+        // Debug.Log("Movement Values " + _movement.ReadValue<Vector2>());
         _moveDirection = _movement.ReadValue<Vector2>();
     }
 
@@ -77,5 +94,10 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         rb.velocity = new Vector2(_moveDirection.x * moveSpeed, rb.velocity.y);
+
+        if (!_facingRight && _moveDirection.x < 0f)
+            Flip();
+        else if (_facingRight && _moveDirection.x > 0f)
+            Flip();
     }
 }

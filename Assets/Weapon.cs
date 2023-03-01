@@ -15,7 +15,6 @@ public class Weapon : MonoBehaviour
     private void Awake()
     {
         _playerInputActions = new PlayerInputActions();
-        rot = firePoint.rotation *= Quaternion.Euler(0, 0, 90);
     }
 
     private void OnEnable()
@@ -36,12 +35,6 @@ public class Weapon : MonoBehaviour
     private void Fire(InputAction.CallbackContext context)
     {
         Debug.Log("Fire");
-        Instantiate(projectile, firePoint.position, rot);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Instantiate(projectile, firePoint.position, firePoint.rotation);
     }
 }

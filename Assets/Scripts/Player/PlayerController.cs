@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour
     public float jumpSpeed;
     public Transform groundCheck;
     public LayerMask groundLayer;
+    public static bool hasDoubleJumpAbility = true; // verify whether the player has unlocked the double jump ability
+    private bool _doubleJumped = false; // checks whether a player has double jumped
 
     [Header("Misc.")]
     public Transform firePoint;
@@ -58,20 +60,25 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// Performs jump action for player
     /// </summary>
-    /// <param name="context"></param>
+    /// <param name="context">Controller Input</param>
     public void DoJump(InputAction.CallbackContext context)
     {
         // Check if button pressed
-        if(context.performed && IsGrounded())
+        if (context.performed && IsGrounded())
             rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
+        else if (context.performed && !_doubleJumped && hasDoubleJumpAbility)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
+            _doubleJumped = true;
+        }
 
         // Check if button released & traveling up
-        if(context.canceled && rb.velocity.y > 0f)
-        {
-            Debug.Log("Jump Canceled");
+        if (context.canceled && rb.velocity.y > 0f)
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.25f);
-        }
-            
+
+        // Reset player double jump
+        if (IsGrounded())
+            _doubleJumped = false;
     }
 
     /// <summary>

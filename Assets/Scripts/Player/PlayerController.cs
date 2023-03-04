@@ -19,6 +19,13 @@ public class PlayerController : MonoBehaviour
     public static bool hasDoubleJumpAbility = true; // verify whether the player has unlocked the double jump ability
     private bool _doubleJumped = false; // checks whether a player has double jumped
 
+    [Header("Dash")]
+    private bool canDash = true;
+    private bool isDashing;
+    public float dashMultiplier;
+    public float dashTime;
+    public float dashCooldown;
+
     [Header("Misc.")]
     public Transform firePoint;
 
@@ -49,6 +56,7 @@ public class PlayerController : MonoBehaviour
     {
         _movement.Disable();
         _playerInputActions.Player.Jump.Disable();
+        _playerInputActions.Player.Dash.Disable();
     }
 
     /// <summary>
@@ -86,7 +94,29 @@ public class PlayerController : MonoBehaviour
 
     public void DoDash(InputAction.CallbackContext context)
     {
-        Debug.Log("Dashed");
+        Debug.Log("Dash");
+        StartCoroutine(Dash());
+    }
+
+    public IEnumerator Dash()
+    {
+        if (canDash)
+        {
+            canDash = false;
+            isDashing = true;
+            float originalGravity = rb.gravityScale;
+            rb.gravityScale = 0f;
+            rb.velocity = new Vector2(rb.velocity.x * dashMultiplier, 0f);
+
+            yield return new WaitForSeconds(dashTime);
+            rb.gravityScale = originalGravity;
+            isDashing = false;
+
+            // Dash cooldown
+            yield return new WaitForSeconds(dashCooldown);
+
+            canDash = true;
+        }
     }
 
     /// <summary>
@@ -108,7 +138,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     private void FixedUpdate()
     {
-        rb.velocity = new Vector2(_moveDirection.x * moveSpeed, rb.velocity.y);
+        if(!isDashing)
+            rb.velocity = new Vector2(_moveDirection.x * moveSpeed, rb.velocity.y);
 
         if (!_facingRight && _moveDirection.x < 0f)
             Flip();

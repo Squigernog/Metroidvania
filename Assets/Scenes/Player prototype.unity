@@ -1276,6 +1276,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: e828b63e-34a1-49d3-8f7b-d05e1517d0d2
     m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 33a14868-d6f2-4bcc-9ae1-952dc37bc69d
+    m_ActionName: Player/Dash[/Keyboard/leftShift,/XInputControllerWindows/rightShoulder]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
@@ -1300,6 +1304,9 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  dashMultiplier: 0
+  dashTime: 0.5
+  dashCooldown: 1
   firePoint: {fileID: 1377997699}
 --- !u!114 &1828276399
 MonoBehaviour:

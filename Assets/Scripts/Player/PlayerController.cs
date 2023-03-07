@@ -7,27 +7,32 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [Header("Physics")]
-    public Rigidbody2D rb;
+    [SerializeField] private Rigidbody2D rb;
     public float moveSpeed;
     private Vector2 _moveDirection;
     private bool _facingRight;
 
     [Header("Jump")]
     public float jumpSpeed;
-    public Transform groundCheck;
-    public LayerMask groundLayer;
+    public float wallSlidingSpeed;
+    public float wallJumpXSpeedMultiplier;
+    public float wallJumpTime;
     public static bool hasDoubleJumpAbility = true; // verify whether the player has unlocked the double jump ability
     private bool _doubleJumped = false; // checks whether a player has double jumped
+    private bool _isWallSliding = false;
+    private bool _isWallJumping;
+    private float _wallJumpDirection;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private Transform wallCheck;
+    [SerializeField] private LayerMask wallLayer;
 
     [Header("Dash")]
     private bool canDash = true;
     private bool isDashing;
-    public float dashMultiplier;
+    public float dashSpeed;
     public float dashTime;
     public float dashCooldown;
-
-    [Header("Misc.")]
-    public Transform firePoint;
 
     [Header("Input")]
     private PlayerInputActions _playerInputActions;
@@ -74,22 +79,76 @@ public class PlayerController : MonoBehaviour
     /// <param name="context">Controller Input</param>
     public void DoJump(InputAction.CallbackContext context)
     {
-        // Check if button pressed
-        if (context.performed && IsGrounded())
-            rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
-        else if (context.performed && !_doubleJumped && hasDoubleJumpAbility)
+        // Prevent jumping in dash
+        if (!isDashing)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
-            _doubleJumped = true;
+            // Check if button pressed
+            if (context.performed && IsGrounded() && !_isWallJumping)
+                rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
+            // Wall jump logic
+            else if (context.performed && IsWalled() && !_isWallJumping)
+            {
+                Debug.Log("Wall Jump");
+                StartCoroutine(WallJump());
+            }
+            else if (context.performed && !_doubleJumped && hasDoubleJumpAbility && !_isWallJumping)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
+                _doubleJumped = true;
+            }
+            
+
+            // Check if button released & traveling up
+            if (context.canceled && rb.velocity.y > 0f)
+                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.25f);
+
+            // Reset player double jump
+            if (IsGrounded())
+                _doubleJumped = false;
         }
+    }
 
-        // Check if button released & traveling up
-        if (context.canceled && rb.velocity.y > 0f)
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.25f);
+    /// <summary>
+    /// Checks whether a player has a wall in front if their character
+    /// </summary>
+    /// <returns>Bool</returns>
+    private bool IsWalled()
+    {
+        return Physics2D.OverlapCircle(wallCheck.position, 0.2f, wallLayer);
+    }
 
-        // Reset player double jump
-        if (IsGrounded())
-            _doubleJumped = false;
+    /// <summary>
+    /// Wall sliding logic
+    /// </summary>
+    private void WallSlide()
+    {
+        if(!IsGrounded() && _moveDirection.x != 0f)
+        {
+            _isWallSliding = true;
+            rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -wallSlidingSpeed, float.MaxValue));
+        }
+    }
+
+    /// <summary>
+    /// Wall jump logic
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator WallJump()
+    {
+        // Make sure player jumps away from wall
+        if (_facingRight)
+            _wallJumpDirection = 1;
+        else
+            _wallJumpDirection = -1;
+        
+
+        _isWallJumping = true;
+        rb.velocity = new Vector2(_wallJumpDirection * moveSpeed * wallJumpXSpeedMultiplier, jumpSpeed);
+        Flip();
+
+        yield return new WaitForSeconds(wallJumpTime);
+
+        _isWallJumping = false;
     }
 
     public void DoDash(InputAction.CallbackContext context)
@@ -105,8 +164,13 @@ public class PlayerController : MonoBehaviour
             canDash = false;
             isDashing = true;
             float originalGravity = rb.gravityScale;
-            rb.gravityScale = 0f;
-            rb.velocity = new Vector2(rb.velocity.x * dashMultiplier, 0f);
+            rb.gravityScale = 0f; // set gravity to 0 during dash
+
+            // Checking direction player is facing allows for dash from standstill
+            if (!_facingRight)
+                rb.velocity = new Vector2(dashSpeed, 0f); // player will dash at speed equal to dash speed
+            else
+                rb.velocity = new Vector2(-dashSpeed, 0f); // player will dash at speed equal to dash speed
 
             yield return new WaitForSeconds(dashTime);
             rb.gravityScale = originalGravity;
@@ -135,15 +199,22 @@ public class PlayerController : MonoBehaviour
         _moveDirection = _movement.ReadValue<Vector2>();
     }
 
+    // TODO: probably make switch statement instead of imbedded if statements based on player state
     // Update is called once per frame
     private void FixedUpdate()
     {
-        if(!isDashing)
-            rb.velocity = new Vector2(_moveDirection.x * moveSpeed, rb.velocity.y);
+        if (!_isWallJumping)
+        {
+            if (!isDashing)
+                rb.velocity = new Vector2(_moveDirection.x * moveSpeed, rb.velocity.y);
 
-        if (!_facingRight && _moveDirection.x < 0f)
-            Flip();
-        else if (_facingRight && _moveDirection.x > 0f)
-            Flip();
+            if (!_facingRight && _moveDirection.x < 0f)
+                Flip();
+            else if (_facingRight && _moveDirection.x > 0f)
+                Flip();
+        }
+
+        if (IsWalled())
+            WallSlide();
     }
 }

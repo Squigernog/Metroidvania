@@ -173,6 +173,7 @@ public class PlayerController : MonoBehaviour
         if (canDash)
         {
             canDash = false;
+            isDashing = true;
             _playerState = PlayerState.Dashing;
             float originalGravity = rb.gravityScale;
             rb.gravityScale = 0f; // set gravity to 0 during dash
@@ -190,6 +191,7 @@ public class PlayerController : MonoBehaviour
             // Dash cooldown
             yield return new WaitForSeconds(dashCooldown);
 
+            isDashing = false;
             // _playerState = notdashing;
             canDash = true;
         }

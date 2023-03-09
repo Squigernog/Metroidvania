@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed;
     private Vector2 _moveDirection;
     private bool _facingRight;
+    private PlayerState _playerState;
 
     [Header("Jump")]
     public float jumpSpeed;
@@ -28,19 +29,29 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask wallLayer;
 
     [Header("Dash")]
-    private bool canDash = true;
-    private bool isDashing;
     public float dashSpeed;
     public float dashTime;
     public float dashCooldown;
+    private bool canDash = true;
+    private bool isDashing;
+    
 
     [Header("Input")]
     private PlayerInputActions _playerInputActions;
     private InputAction _movement;
 
+    public enum PlayerState
+    {
+        Grounded,
+        Jumping,
+        Dashing,
+        WallSliding
+    }
+
     private void Awake()
     {
-        _playerInputActions = new PlayerInputActions();
+        if (_playerInputActions == null)
+            _playerInputActions = new PlayerInputActions();
     }
 
     private void OnEnable()
@@ -216,5 +227,16 @@ public class PlayerController : MonoBehaviour
 
         if (IsWalled())
             WallSlide();
+
+        switch (_playerState)
+        {
+            case PlayerState.Grounded:
+                break;
+            case PlayerState.Jumping:
+                break;
+            case PlayerState.Dashing:
+                break;
+        }
+
     }
 }

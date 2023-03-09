@@ -1556,8 +1556,8 @@ MonoBehaviour:
   moveSpeed: 10
   jumpSpeed: 16
   wallSlidingSpeed: 2
-  wallJumpXSpeedMultiplier: 0.75
-  wallJumpTime: 0.5
+  wallJumpXSpeedMultiplier: 0.85
+  wallJumpTime: 0.4
   groundCheck: {fileID: 903573396}
   groundLayer:
     serializedVersion: 2

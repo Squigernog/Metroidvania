@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     public static bool hasDoubleJumpAbility = true; // verify whether the player has unlocked the double jump ability
     private bool _doubleJumped = false; // checks whether a player has double jumped
     private bool _isWallSliding = false;
+    private bool _hasDashed = false;
     private bool _isWallJumping;
     private float _wallJumpDirection;
     [SerializeField] private Transform groundCheck;
@@ -33,7 +34,6 @@ public class PlayerController : MonoBehaviour
     public float dashSpeed;
     public float dashTime;
     public float dashCooldown;
-    private bool canDash = true;
     private bool isDashing;
     
 
@@ -118,7 +118,11 @@ public class PlayerController : MonoBehaviour
 
             // Reset player double jump
             if (IsGrounded())
+            {
                 _doubleJumped = false;
+                _hasDashed = false;
+            }
+                
         }
     }
 
@@ -173,9 +177,9 @@ public class PlayerController : MonoBehaviour
 
     public IEnumerator Dash()
     {
-        if (canDash)
+        if (!_hasDashed)
         {
-            canDash = false;
+            _hasDashed = true;
             isDashing = true;
             _playerState = PlayerState.Dashing;
             
@@ -190,13 +194,7 @@ public class PlayerController : MonoBehaviour
             yield return new WaitForSeconds(dashTime);
             rb.gravityScale = originalGravity;
             isDashing = false;
-
-            // Dash cooldown
-            yield return new WaitForSeconds(dashCooldown);
-
-            isDashing = false;
             // _playerState = notdashing;
-            canDash = true;
         }
     }
 
@@ -218,7 +216,6 @@ public class PlayerController : MonoBehaviour
         StopCoroutine(Dash());
         rb.gravityScale = originalGravity;
         isDashing = false;
-        canDash = true;
     }
 
     private void Update()

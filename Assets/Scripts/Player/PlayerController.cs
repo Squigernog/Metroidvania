@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 _moveDirection;
     private bool _facingRight;
     private PlayerState _playerState;
+    private float originalGravity;
 
     [Header("Jump")]
     public float jumpSpeed;
@@ -66,6 +67,8 @@ public class PlayerController : MonoBehaviour
 
         _playerInputActions.Player.Dash.performed += DoDash;
         _playerInputActions.Player.Dash.Enable();
+
+        originalGravity = rb.gravityScale;
     }
 
     private void OnDisable()
@@ -175,7 +178,7 @@ public class PlayerController : MonoBehaviour
             canDash = false;
             isDashing = true;
             _playerState = PlayerState.Dashing;
-            float originalGravity = rb.gravityScale;
+            
             rb.gravityScale = 0f; // set gravity to 0 during dash
 
             // Checking direction player is facing allows for dash from standstill
@@ -207,6 +210,17 @@ public class PlayerController : MonoBehaviour
         transform.Rotate(0f, 180f, 0f);
     }
 
+    /// <summary>
+    /// Cancels dash coroutine and resets dash related variables
+    /// </summary>
+    private void CancelDash()
+    {
+        StopCoroutine(Dash());
+        rb.gravityScale = originalGravity;
+        isDashing = false;
+        canDash = true;
+    }
+
     private void Update()
     {
         // Debug.Log("Movement Values " + _movement.ReadValue<Vector2>());
@@ -229,7 +243,11 @@ public class PlayerController : MonoBehaviour
         }
 
         if (IsWalled())
+        {
+            CancelDash();
             WallSlide();
+        }
+            
 
         switch (_playerState)
         {

@@ -57,13 +57,14 @@ public class EnemyAI : MonoBehaviour
         return new Vector3(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f)).normalized;
     }
 
+    /* //old code from WWaS
     public void RotateTowardsTarget(Vector3 targetPosition) //Rotate: https://www.youtube.com/watch?v=mKLp-2iseDc&ab_channel=KristerCederlund
     {
         Vector3 vectorToTarget = targetPosition - transform.position;
         float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
         Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
         transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.fixedDeltaTime * EN.rotationSpeed);
-    }
+    }*/
 
     public IEnumerator PlayerSpottedStatusCoroutine()
     {

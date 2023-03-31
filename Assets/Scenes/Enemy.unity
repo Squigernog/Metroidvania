@@ -1371,6 +1371,8 @@ GameObject:
   - component: {fileID: 1790446072}
   - component: {fileID: 1790446071}
   - component: {fileID: 1790446070}
+  - component: {fileID: 1790446075}
+  - component: {fileID: 1790446074}
   m_Layer: 0
   m_Name: Crawler
   m_TagString: Untagged
@@ -1492,6 +1494,47 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1790446074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1790446069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5e05f1a742207744b673519ed4fce4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingPos: {x: 0, y: 0, z: 0}
+  roamingPos: {x: 0, y: 0, z: 0}
+  playerPos: {fileID: 0}
+  investigateStatus: {fileID: 0}
+  playerSpottedStatus: {fileID: 0}
+  tiredStatus: {fileID: 0}
+  EN: {fileID: 0}
+  state: 0
+  iState: 0
+  alert: 0
+  nextWaypointDistance: 3
+  currentWaypoint: 0
+  rb: {fileID: 0}
+  roamSpeed: 0.01
+--- !u!114 &1790446075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1790446069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a44b4abc32b624741abeade7bfff6080, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attack: 1
+  maxHealth: 100
+  currentHealth: 0
 --- !u!1 &1863421477
 GameObject:
   m_ObjectHideFlags: 0

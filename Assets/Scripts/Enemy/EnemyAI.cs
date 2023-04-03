@@ -26,7 +26,6 @@ public class EnemyAI : MonoBehaviour
 
     [SerializeField] public GameObject investigateStatus;
     [SerializeField] public GameObject playerSpottedStatus;
-    [SerializeField] public GameObject tiredStatus;
 
     public Enemy EN;
 

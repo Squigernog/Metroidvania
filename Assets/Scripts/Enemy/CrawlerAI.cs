@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class CrawlerAI : EnemyAI
 {
-    // Start is called before the first frame update
-    void Start()
+    public float movement = 5;
+
+    private void OnEnable()
     {
-        
+        rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
-        
+        transform.position = new Vector2(0, movement);
     }
 }

@@ -1426,7 +1426,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!212 &1790446072
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1511,7 +1511,6 @@ MonoBehaviour:
   playerPos: {fileID: 0}
   investigateStatus: {fileID: 0}
   playerSpottedStatus: {fileID: 0}
-  tiredStatus: {fileID: 0}
   EN: {fileID: 0}
   state: 0
   iState: 0
@@ -1520,6 +1519,7 @@ MonoBehaviour:
   currentWaypoint: 0
   rb: {fileID: 0}
   roamSpeed: 0.01
+  movement: 5
 --- !u!114 &1790446075
 MonoBehaviour:
   m_ObjectHideFlags: 0

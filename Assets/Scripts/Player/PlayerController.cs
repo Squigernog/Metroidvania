@@ -11,7 +11,6 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed;
     private Vector2 _moveDirection;
     private bool _facingRight;
-    private PlayerState _playerState;
     private float originalGravity;
 
     [Header("Jump")]
@@ -33,7 +32,7 @@ public class PlayerController : MonoBehaviour
     public float dashSpeed;
     public float dashTime;
     public float dashCooldown;
-    private bool isDashing;
+    private bool _isDashing;
 
     [Header("Abilities")]
     public bool doubleJumpEnabled = false;
@@ -44,14 +43,6 @@ public class PlayerController : MonoBehaviour
     [Header("Input")]
     private PlayerInputActions _playerInputActions;
     private InputAction _movement;
-
-    public enum PlayerState
-    {
-        Grounded,
-        Jumping,
-        Dashing,
-        WallSliding
-    }
 
     private void Awake()
     {
@@ -98,7 +89,7 @@ public class PlayerController : MonoBehaviour
     public void DoJump(InputAction.CallbackContext context)
     {
         // Prevent jumping in dash
-        if (!isDashing)
+        if (!_isDashing)
         {
             // Check if button pressed
             if (context.performed && IsGrounded() && !_isWallJumping)
@@ -194,8 +185,7 @@ public class PlayerController : MonoBehaviour
         if (!_hasDashed)
         {
             _hasDashed = true;
-            isDashing = true;
-            _playerState = PlayerState.Dashing;
+            _isDashing = true;
             
             rb.gravityScale = 0f; // set gravity to 0 during dash
 
@@ -207,7 +197,7 @@ public class PlayerController : MonoBehaviour
 
             yield return new WaitForSeconds(dashTime);
             rb.gravityScale = originalGravity;
-            isDashing = false;
+            _isDashing = false;
             // _playerState = notdashing;
         }
     }
@@ -229,7 +219,7 @@ public class PlayerController : MonoBehaviour
     {
         StopCoroutine(Dash());
         rb.gravityScale = originalGravity;
-        isDashing = false;
+        _isDashing = false;
     }
 
     private void Update()
@@ -244,7 +234,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!_isWallJumping)
         {
-            if (!isDashing)
+            if (!_isDashing)
                 rb.velocity = new Vector2(_moveDirection.x * moveSpeed, rb.velocity.y);
 
             if (!_facingRight && _moveDirection.x < 0f)
@@ -258,17 +248,5 @@ public class PlayerController : MonoBehaviour
             CancelDash();
             WallSlide();
         }
-            
-
-        switch (_playerState)
-        {
-            case PlayerState.Grounded:
-                break;
-            case PlayerState.Jumping:
-                break;
-            case PlayerState.Dashing:
-                break;
-        }
-
     }
 }

@@ -7,19 +7,34 @@ public class Enemy : MonoBehaviour
     public int attack = 1;
     public int maxHealth = 100;
     [SerializeField]
-    public int currentHealth;
+    private int _currentHealth;
 
-
-
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        
+        _currentHealth = maxHealth;
     }
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// Assign damage to the enemy
+    /// </summary>
+    /// <param name="damage">Damage from a player attack</param>
+    public void TakeDamage(int damage)
     {
-        
+        _currentHealth -= damage;
+
+        if (IsDead())
+            Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// Checks if an enemy is dead. True if health < 0
+    /// </summary>
+    /// <returns>boolean</returns>
+    private bool IsDead()
+    {
+        if (_currentHealth > 0)
+            return false;
+        else
+            return true;
     }
 }

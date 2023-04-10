@@ -19,7 +19,6 @@ public class PlayerController : MonoBehaviour
     public float wallSlidingSpeed;
     public float wallJumpXSpeedMultiplier;
     public float wallJumpTime;
-    public static bool hasDoubleJumpAbility = true; // verify whether the player has unlocked the double jump ability
     private bool _doubleJumped = false; // checks whether a player has double jumped
     private bool _isWallSliding = false;
     private bool _hasDashed = false;
@@ -35,7 +34,12 @@ public class PlayerController : MonoBehaviour
     public float dashTime;
     public float dashCooldown;
     private bool isDashing;
-    
+
+    [Header("Abilities")]
+    public bool doubleJumpEnabled = false;
+    public bool dashEnabled = false;
+    public bool wallJumpEnabled = false;
+
 
     [Header("Input")]
     private PlayerInputActions _playerInputActions;
@@ -105,7 +109,7 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("Wall Jump");
                 StartCoroutine(WallJump());
             }
-            else if (context.performed && !_doubleJumped && hasDoubleJumpAbility && !_isWallJumping)
+            else if (context.performed && !_doubleJumped && doubleJumpEnabled && !_isWallJumping)
             {
                 rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
                 _doubleJumped = true;
@@ -153,6 +157,11 @@ public class PlayerController : MonoBehaviour
     /// <returns></returns>
     private IEnumerator WallJump()
     {
+        if (!wallJumpEnabled)
+        {
+            yield break;
+        }
+
         // Make sure player jumps away from wall
         if (_facingRight)
             _wallJumpDirection = 1;
@@ -177,6 +186,11 @@ public class PlayerController : MonoBehaviour
 
     public IEnumerator Dash()
     {
+        if (!dashEnabled)
+        {
+            yield break;
+        }
+
         if (!_hasDashed)
         {
             _hasDashed = true;

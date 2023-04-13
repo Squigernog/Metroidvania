@@ -222,6 +222,21 @@ public class PlayerController : MonoBehaviour
         _isDashing = false;
     }
 
+    public void SetDoubleJump(bool value)
+    {
+        doubleJumpEnabled = value;
+    }
+
+    public void SetWallJump(bool value)
+    {
+        wallJumpEnabled = value;
+    }
+
+    public void SetDash(bool value)
+    {
+        dashEnabled = value;
+    }
+
     private void Update()
     {
         // Debug.Log("Movement Values " + _movement.ReadValue<Vector2>());

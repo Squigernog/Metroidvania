@@ -43,7 +43,6 @@ public class PlayerController : MonoBehaviour
     public bool wallJumpEnabled = false;
     public bool hasWeapon = false;
 
-
     [Header("Input")]
     private PlayerInputActions _playerInputActions;
     private InputAction _movement;

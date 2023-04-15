@@ -31,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 7347989241175026445}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.28901675, y: -0.20369339, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.7808, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7347989242095799358}
@@ -225,6 +225,14 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 33a14868-d6f2-4bcc-9ae1-952dc37bc69d
     m_ActionName: Player/Dash[/Keyboard/leftShift,/XInputControllerWindows/rightShoulder]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0faadd22-e66e-4f29-aede-ded290761403
+    m_ActionName: Player/Map[/Keyboard/m]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1405ace2-cab8-400b-bbb5-397aa602c41c
+    m_ActionName: Player/Settings[/Keyboard/escape]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
@@ -242,6 +250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90f3f0ef801d88646ba18d0b01111973, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerWeapon: {fileID: 7347989241175026437}
   rb: {fileID: 7347989241175026433}
   moveSpeed: 10
   jumpSpeed: 16
@@ -262,6 +271,7 @@ MonoBehaviour:
   doubleJumpEnabled: 0
   dashEnabled: 0
   wallJumpEnabled: 0
+  hasWeapon: 0
 --- !u!114 &7347989241175026437
 MonoBehaviour:
   m_ObjectHideFlags: 0

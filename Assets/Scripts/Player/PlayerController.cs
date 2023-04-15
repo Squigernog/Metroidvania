@@ -6,6 +6,9 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Items")]
+    [SerializeField] Weapon playerWeapon;
+
     [Header("Physics")]
     [SerializeField] private Rigidbody2D rb;
     public float moveSpeed;
@@ -38,6 +41,7 @@ public class PlayerController : MonoBehaviour
     public bool doubleJumpEnabled = false;
     public bool dashEnabled = false;
     public bool wallJumpEnabled = false;
+    public bool hasWeapon = false;
 
 
     [Header("Input")]
@@ -235,6 +239,11 @@ public class PlayerController : MonoBehaviour
     public void SetDash(bool value)
     {
         dashEnabled = value;
+    }
+
+    public void enablePlayerWeapon()
+    {
+        playerWeapon.EnableWeapon();
     }
 
     private void Update()

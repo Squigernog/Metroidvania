@@ -7,6 +7,7 @@ public class Weapon : MonoBehaviour
 {
     public Transform firePoint;
     public GameObject projectile;
+    private bool weaponEnabled;
     private Quaternion rot;
 
     [Header("Input")]
@@ -15,6 +16,11 @@ public class Weapon : MonoBehaviour
     private void Awake()
     {
         _playerInputActions = new PlayerInputActions();
+    }
+
+    public void EnableWeapon()
+    {
+        weaponEnabled = true;
     }
 
     private void OnEnable()
@@ -34,6 +40,11 @@ public class Weapon : MonoBehaviour
     /// <param name="context"></param>
     private void Fire(InputAction.CallbackContext context)
     {
+        if (!weaponEnabled)
+        {
+            return;
+        }
+
         Debug.Log("Fire");
         Instantiate(projectile, firePoint.position, firePoint.rotation);
     }
